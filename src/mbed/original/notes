@@ -1,0 +1,20 @@
+//notes.h - project notes, no code here!!!!!
+ 
+\r\n<
+
+command format
+
+dhcp
+
+
+
+specify what must match btwn UI and socket
+
+
+General todo:
+    - check inits for each file do indeed init EVERYTHING
+    - separate into .c .h 
+
+
+------------------------
+FILE DESCRIPTION:
