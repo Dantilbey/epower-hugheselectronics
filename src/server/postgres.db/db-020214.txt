@@ -1,0 +1,162 @@
+//	IMPRESS DB 							//
+//	Written by Daniel Tilbey 2014 		//
+//	Last updated: 02-02-14 				//
+	
+//	db_name = impress					//
+//	username = hughes					//
+//	password = electronics				//
+
+CREATE TABLE settings (
+	optid SERIAL primary key,
+	option varchar(24) NOT NULL,
+	val varchar(24)
+);
+
+CREATE TABLE users (
+	user_no SERIAL primary key,
+	user_id varchar(36) UNIQUE NOT NULL,
+	password varchar(80) NOT NULL,
+	email varchar(80) NOT NULL,
+	session_id varchar(80) DEFAULT NULL
+);
+
+CREATE TABLE session_cookies (
+	session_id varchar(80) UNIQUE NOT NULL,
+	status boolean DEFAULT '0'
+);
+
+CREATE_TABLE privileges (
+);
+
+CREATE TABLE websocket_keys (
+	sock_no SERIAL primary key,
+	key_id varchar(80) UNIQUE NOT NULL,
+);
+
+CREATE TABLE rooms (
+);
+
+CREATE TABLE appliances (
+	appliance_no SERIAL primary key,
+	appliance_id varchar(80) NOT NULL,
+	description text
+);
+
+CREATE TABLE modules (
+	m_no SERIAL primary key,
+	m_id varchar(80) UNIQUE NOT NULL,
+	appliance_no SERIAL references appliances(appliance_no) ON DELETE NO ACTION,
+	connected boolean DEFAULT '0',
+	active boolean DEFAULT '0'
+);
+
+CREATE TABLE module_data (
+	data_datetime timestamp,
+	m_id varchar(24) references modules(m_id) ON DELETE CASCADE,
+	temp varchar(24) NOT NULL,
+	freq varchar(24) NOT NULL,
+	volt varchar(24) NOT NULL,
+	cost varchar(24) NOT NULL,
+	watt varchar(24) NOT NULL,
+	curr varchar(24) NOT NULL,
+	phase varchar(24) NOT NULL,
+	primary key (data_datetime,m_id)
+);
+
+CREATE TABLE outlets (
+);
+
+CREATE TABLE outlet_data (
+);
+
+CREATE TABLE status (
+	m_id varchar(80) references module(m_id) ON DELETE NO ACTION,
+	appliance_no SERIAL references appliances(appliance_no) ON DELETE CASCADE,
+	status_datetime timestamp,
+	primary key(status_datetime,m_id)
+);
+
+CREATE TABLE events (
+	event_no SERIAL primary key,
+	type varchar(80),
+	description text
+);
+
+CREATE TABLE notifications (
+	notify_no SERIAL primary key,
+	notify_datetime timestamp,
+	event_no SERIAL references events(event_no) ON DELETE CASCADE,
+	goto_activity boolean DEFAULT '0',
+	activity_args json DEFAULT NULL,
+	isnew boolean DEFAULT '1',
+	isread boolean DEFAULT '0'
+);
+
+CREATE TABLE log_messages (
+	log_id SERIAL primary key,
+	type varchar(80),
+	description text
+);
+
+CREATE TABLE log (
+	log_no SERIAL primary key,
+	log_datetime timestamp,
+	log_id SERIAL references log_messages(log_id) ON DELETE CASCADE,
+	log_args json DEFAULT NULL
+);
+
+CREATE TABLE recipients (
+	recipient_no SERIAL primary key,
+	user_id varchar(24) references users(user_id) ON DELETE CASCADE,
+	recipient_id varchar(80) NOT NULL,
+	device_key varchar(80) UNIQUE NOT NULL
+);
+
+GRANT USAGE, SELECT ON SEQUENCE users_user_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE websocket_keys_sock_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE appliances_appliance_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE modules_m_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE modules_appliance_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE status_appliances_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE events_event_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE notifications_notify_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE notifications_event_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE log_messages_log_id_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE log_log_no_seq TO hughes;
+GRANT USAGE, SELECT ON SEQUENCE log_log_id_seq TO hughes;
+
+
+//	users_user_no_seq
+//	users_pkey
+//	users_user_id_key
+
+//	websocket_keys_sock_no_seq
+//	websockey_keys_pkey
+//	websocket_keys_key_id_key
+
+//	appliances_appliance_no_seq
+//	appliances_pkey
+
+//	modules_m_no_seq
+//	modules_appliance_no_seq
+//	modules_pkey
+//	modules_m_id_key
+
+//	module_data_pkey
+
+//	status_appliances_no_seq
+//	status_pkey
+
+//	events_event_no_seq
+//	events_pkey
+
+//	notifications_notify_no_seq
+//	notifications_event_no_seq
+//	notifications_pkey
+
+//	log_messages_log_id_seq
+//	log_messages_pkey
+
+//	log_log_no_seq
+//	log_log_id_seq
+//	log_pkey

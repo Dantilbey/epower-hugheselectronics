@@ -1,0 +1,70 @@
+CREATE TABLE system (
+systemState boolean,
+systemUser varchar(80),
+systemKey varchar(80),
+cost integer,
+record timestamp
+); -- DROPPED
+
+CREATE TABLE settings (
+option varchar(80) NOT NULL primary key,
+value varchar(160) NOT NULL
+); SystemSTATE, SystemID, SystemKEY, UnitRate, StandingCharge, AvgEfficiency, PeaktimeLOW, PeaktimeHIGH, SystemBackup
+
+CREATE TABLE room (
+RoomNo serial primary key,
+description varchar(160),
+efficiencyrating integer
+);
+
+CREATE TABLE module (
+ModuleNo serial primary key,
+ModKey varchar(80) UNIQUE NOT NULL,
+RoomNo serial references room(RoomNo),
+ApplianceNo serial references appliance(ApplianceNo),
+description varchar(160),
+connected boolean,
+active boolean
+);
+
+CREATE TABLE data (
+Timestamp timestamp primary key,
+ModuleKey varchar(80) references module(ModuleKey),
+temperature varchar(80) NOT NULL,
+frequency varchar(80) NOT NULL,
+voltage varchar(80) NOT NULL,
+cost varchar(80) NOT NULL,
+wattage varchar(80) NOT NULL,
+current varchar(80) NOT NULL,
+phase varchar(80) NOT NULL
+);
+
+CREATE TABLE appliance (
+ApplianceNo serial primary key,
+applianceID varchar(80),
+description varchar(160)
+);
+
+CREATE TABLE status (
+ModuleKey varchar(80) references module(ModuleKey),
+Timestamp timestamp,
+active boolean
+);sdfasdf
+
+CREATE TABLE events (
+eventid int(10) unsigned primary key,
+info varchar(160)
+);
+
+CREATE TABLE notifications (
+id int(10) unsigned NOT NULL AUTO_INCREMENT primary key,
+recipientUid int(10) unsigned UNIQUE NOT NULL,
+eventid int(10) unsigned references events(eventid),
+isNew boolean NOT NULL DEFAULT '1',
+isRead boolean NOT NULL DEFAULT '0'
+);
+
+GRANT ALL PRIVILEGES ON * TO jelly_user;
+GRANT USAGE, SELECT ON SEQUENCE room_roomno_seq TO jelly_user;
+GRANT USAGE, SELECT ON SEQUENCE module_moduleno_seq TO jelly_user;
+GRANT USAGE, SELECT ON SEQUENCE appliance_applianceno_seq TO jelly_user;

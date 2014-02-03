@@ -1,0 +1,72 @@
+# Jelly Command-Line Util - 230114 - by Daniel Tilbey 2014
+# A light weight command line tool for server administrators, this tool can
+# be used for querying and updating the jelly database and acts as a websocket
+# client for interfacing with the jelly socket server.
+
+""" Options
+
+set password *arg
+set username *arg
+set cost *arg
+
+list appliances all
+list modules [connected, not_connected, all]
+list rooms all
+
+add appliance *name *type *description
+add module *key
+add room *name *description
+
+change appliance [name *name, description *description]
+change room [name *name, description *description]
+
+delete appliance *id
+delete module *serial
+delete room *id
+
+"""
+
+""" Module Keys
+zPcFUVZn4auapcsTA8PgYTbm
+MRm5atDAyn54BddmkjSkFvW9
+C7RwVQS7BnefmkwKsWHApMxK
+Vdf69ECRnJNKPWdCC2uSBP3L
+8c4zKn6shEdDXdCdtVvdVSL6
+"""
+
+""" Events
+Module connected *on socket open
+Module disconnected *on socket close
+Appliance connected *set if appliance is not connection + if phase > 0
+Appliance not connected *if appliance is connected + phase <= 0.01
+Appliance switched on *on success
+Appliance switched off *on success
+
+Unit cost per wattage has been updated
+Password has been updated
+Username has been updated
+
+New appliance has been added
+New module has been added
+New room has been added
+
+Appliance has been updated
+Room has been updated
+
+Appliance has been deleted
+Room has been deleted
+Module has been deleted
+"""
+
+"""
+Unit cost			11.910 pence per kwh
+Standing Charge		26 pence
+Usage per year 19,000 kWh
+Kwh per day 	52
+
+"""
+
+""" Web Socket Keys
+
+"""
+
